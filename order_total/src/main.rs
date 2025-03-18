@@ -70,10 +70,10 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, anyhow::Er
             let mut order: Order = serde_json::from_slice(&byte_stream).unwrap();
 
             let client = reqwest::Client::new();
-            let rate = client.post(&*SALES_TAX_RATE_SERVICE)
+            let rate_resp = client.post(&*SALES_TAX_RATE_SERVICE)
                 .body(order.shipping_zip.clone())
                 .send()
-                .await?
+                .await?;
 
             if rate_resp.status().is_success() {
                 let rate = rate_resp.text()
